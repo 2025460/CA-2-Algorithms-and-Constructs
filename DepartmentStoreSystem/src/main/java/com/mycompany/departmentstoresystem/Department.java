@@ -9,12 +9,18 @@ package com.mycompany.departmentstoresystem;
  * @author emcav
  */
 public class Department {
-    
+
     private String name;
 
     public Department(String name) {
         this.name = name;
     }
 
-    // Getters and setters will be added later
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

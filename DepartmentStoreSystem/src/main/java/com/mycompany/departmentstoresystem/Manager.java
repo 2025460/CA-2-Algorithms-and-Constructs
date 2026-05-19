@@ -8,14 +8,25 @@ package com.mycompany.departmentstoresystem;
  *
  * @author emcav
  */
-public class Manager {
-    
- private String level;
+public class Manager extends Employee {
+
+    private String level;
 
     public Manager(String name, String managerType, Department department, String level) {
         super(name, managerType, department);
         this.level = level;
     }
 
-    // 
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " | Level: " + level;
+    }
 }
