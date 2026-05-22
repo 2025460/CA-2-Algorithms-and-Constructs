@@ -9,8 +9,8 @@ package com.mycompany.departmentstoresystem;
  * @author emcav
  */
 public class TreeNode {
-    
- Employee employee;
+
+    Employee employee;
     TreeNode left;
     TreeNode right;
 
