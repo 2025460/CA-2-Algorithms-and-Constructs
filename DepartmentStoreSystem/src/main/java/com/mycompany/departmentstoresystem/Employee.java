@@ -20,7 +20,7 @@ public class Employee {
         this.department = department;
     }
 
-    // Getters
+    
     public String getName() {
         return name;
     }
@@ -33,7 +33,7 @@ public class Employee {
         return department;
     }
 
-    // Setters
+    
     public void setName(String name) {
         this.name = name;
     }
