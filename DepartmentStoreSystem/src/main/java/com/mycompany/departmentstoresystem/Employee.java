@@ -10,45 +10,45 @@ package com.mycompany.departmentstoresystem;
  */
 public class Employee {
 
-    private String name;
-    private String managerType;
-    private Department department;
+    private String name;// stores the employees full name
+    private String managerType;// stores the type of manager this employee 
+    private Department department;// stores the department object this employee belongs to
 
-    public Employee(String name, String managerType, Department department) {
-        this.name = name;
-        this.managerType = managerType;
-        this.department = department;
+    public Employee(String name, String managerType, Department department) {//  this one receives the employee name, manager type and department
+        this.name = name; //set employee name
+        this.managerType = managerType;// set manager type
+        this.department = department;// set department object
     }
 
     
-    public String getName() {
-        return name;
+    public String getName() { //this is used by other  classes to read the name safely
+        return name;// returns the employee name
     }
 
-    public String getManagerType() {
-        return managerType;
+    public String getManagerType() { 
+        return managerType; // returns to the manager type
     }
 
-    public Department getDepartment() {
-        return department;
+    public Department getDepartment() { //this allows access to department details like its name
+        return department; //returns  the department object 
     }
 
     
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String name) { //updates the employee name
+        this.name = name; // useful if the name needs to be corrected or changed
     }
 
-    public void setManagerType(String managerType) {
+    public void setManagerType(String managerType) { // this method , updates  the manager type 
         this.managerType = managerType;
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
+    public void setDepartment(Department department) { // updates the department object 
+        this.department = department; // allows to add a new employee
     }
 
     @Override
     public String toString() {
-        return name + " | " + managerType + " | " + department.getName();
+        return name + " | " + managerType + " | " + department.getName(); // returns a formatted string representation of the employee
     }
 }
  

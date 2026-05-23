@@ -10,13 +10,13 @@ package com.mycompany.departmentstoresystem;
  */
 public class TreeNode {
 
-    Employee employee;
-    TreeNode left;
-    TreeNode right;
+    Employee employee;// stores the employee object held in this node 
+    TreeNode left;// left child the binary tree 
+    TreeNode right;//right child the binary tree 
 
-    public TreeNode(Employee employee) {
-        this.employee = employee;
-        this.left = null;
-        this.right = null;
+    public TreeNode(Employee employee) {// this one creates a new tree node containing an employee and initializies both childen as null
+        this.employee = employee;// set the employee stored in this node 
+        this.left = null; // no left child yet
+        this.right = null;// no right child yet
     }
 }

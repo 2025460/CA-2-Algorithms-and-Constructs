@@ -10,23 +10,23 @@ package com.mycompany.departmentstoresystem;
  */
 public class Manager extends Employee {
 
-    private String level;
+    private String level; // Extra attribute only for managers
 
-    public Manager(String name, String managerType, Department department, String level) {
-        super(name, managerType, department);
-        this.level = level;
+    public Manager(String name, String managerType, Department department, String level) {// Constructor: creates a Manager and also calls Employee constructor
+        super(name, managerType, department); // Set inherited fields
+        this.level = level;// set manager level 
     }
 
-    public String getLevel() {
+    public String getLevel() { // returns the manager level
         return level;
     }
 
-    public void setLevel(String level) {
+    public void setLevel(String level) {// updates the manager level
         this.level = level;
     }
 
     @Override
-    public String toString() {
+    public String toString() {// returns a readable string with all manager info
         return super.toString() + " | Level: " + level;
     }
 }

@@ -15,65 +15,68 @@ import java.util.Scanner;
  */
 public class DepartmentStoreSystem {
 
-    private static Scanner sc = new Scanner(System.in);
-    private static List<String> applicants = new ArrayList<>();
-    private static List<Employee> employees = new ArrayList<>();
+    private static Scanner sc = new Scanner(System.in); //Scanner used to read user input from the keyboard
+    private static List<String> applicants = new ArrayList<>();//List that sotres applicants loaded from the file
+    private static List<Employee> employees = new ArrayList<>();//List that stores employees added manually by the user
+    private static List<String> manualApplicants = new ArrayList<>();//List that sotres name typed manually (Used later when mixing with file applicants
 
     // ======================================================
     //                     MAIN MENU
     // ======================================================
-    public static void main(String[] args) {
+    public static void main(String[] args) { // TODO code application logic here
 
-        System.out.println("=======================================");
+        System.out.println("");
         System.out.println("   DEPARTMENT STORE EMPLOYEE SYSTEM    ");
-        System.out.println("=======================================");
+        System.out.println("");
 
-        boolean running = true;
+        boolean running = true;//Controls when the system should stop
 
-        while (running) {
+        while (running) { //Main loop that keeps the manu running until the user chooses to exit
+            //This is the main menu options//
             System.out.println("\nMAIN MENU");
             System.out.println("1. Add Employee");
             System.out.println("2. Search Employee");
             System.out.println("3. Sort Employee List");
             System.out.println("4. Generate Employee Hierarchy");
-            System.out.println("5. Display All Employees");
-            System.out.println("6. Exit System");
-            System.out.println("7. Load & Sort Applicants File");   // ← NUEVA OPCIÓN
+            System.out.println("5. Display Added Employees");
+            System.out.println("6. Sort Applicants File");
+            System.out.println("7. Exit System");
             System.out.print("Select an option: ");
 
-            String choice = sc.nextLine().trim();
+            String choice = sc.nextLine().trim();// read the user manu choice
 
-            switch (choice) {
+            switch (choice) { // handle the user selection
 
                 case "1":
-                    addEmployee();
+                    addEmployee(); //Add a new employee
                     break;
 
                 case "2":
-                    searchEmployee();
+                    searchEmployee();//Search for an employee by name 
                     break;
 
                 case "3":
-                    sortEmployees();
+                    sortEmployees();//Sort employee alphabetically
                     break;
 
                 case "4":
-                    generateHierarchy();
-                    break;
+                    generateHierarchy();//Build a binary tree hierarchy
+                    break;  
 
                 case "5":
-                    displayEmployees();
+                    displayAddedEmployees();//Show all employees added
                     break;
 
                 case "6":
-                    System.out.println("Exiting system!");
-                    running = false;
+                    ApplicantsFromFile();//Load applicants from file
+                    sortApplicants();//Sort them 
+                    displayFirst20Applicants();// Show the first 20 employees
                     break;
-
-                case "7":   // ← NUEVO CASE
-                    loadApplicantsFromFile();
-                    sortApplicants();
-                    displayFirst20Applicants();
+                    
+                case "7":   
+   
+                    System.out.println("Finish programm");
+                    running = false;// Stop the loop and exit 
                     break;
 
                 default:
@@ -85,35 +88,33 @@ public class DepartmentStoreSystem {
     // ======================================================
     //                  ADD EMPLOYEE
     // ======================================================
-    private static void addEmployee() {
+    private static void addEmployee() {  //Method to validate when the user add a new employee
 
         System.out.println("\n--- ADD NEW EMPLOYEE ---");
 
-        // NAME
-        System.out.print("Enter employee name: ");
+        System.out.print("Enter employee name: ");//Ask for employee name
         String name = sc.nextLine().trim();
 
-        if (name.isEmpty()) {
+        if (name.isEmpty()) {// Validate empty input 
             System.out.println("Error: Name cannot be empty.");
             return;
         }
-        if (!name.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$")) {
+        if (!name.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$")) {// Validate that the name comtains only letters
             System.out.println("Error: Name must contain only letters. Numbers or symbols are not allowed.");
             return;
         }
 
-        // Normalize name
-        name = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+        name = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();//Format that name(Capitalize first letter)
 
-        // Check duplicates
-        for (Employee e : employees) {
+        
+        for (Employee e : employees) {//Check if the employee already exists
             if (e.getName().equalsIgnoreCase(name)) {
                 System.out.println("Error: An employee with this name already exists.");
                 return;
             }
         }
-
-        // MANAGER TYPE
+        
+           //Ask the user to choose a manager type 
         System.out.println("Select Manager Type:");
         System.out.println("1. Floor Manager");
         System.out.println("2. Assistant Manager");
@@ -123,22 +124,17 @@ public class DepartmentStoreSystem {
         String managerChoice = sc.nextLine().trim();
         String managerType = "";
 
+        //Convert user choice into a manager type string
         switch (managerChoice) {
-            case "1":
-                managerType = "Floor Manager";
-                break;
-            case "2":
-                managerType = "Assistant Manager";
-                break;
-            case "3":
-                managerType = "General Manager";
-                break;
+            case "1": managerType = "Floor Manager"; break;
+            case "2": managerType = "Assistant Manager"; break;
+            case "3": managerType = "General Manager"; break;
             default:
                 System.out.println("Error: Invalid Manager Type.");
                 return;
         }
 
-        // DEPARTMENT
+        //Ask the user to choose a department
         System.out.println("Select Department:");
         System.out.println("1. Electronics");
         System.out.println("2. Clothing");
@@ -148,25 +144,21 @@ public class DepartmentStoreSystem {
         String deptChoice = sc.nextLine().trim();
         Department department;
 
+        //Convert user choice into a department object
         switch (deptChoice) {
-            case "1":
-                department = new Department("Electronics");
-                break;
-            case "2":
-                department = new Department("Clothing");
-                break;
-            case "3":
-                department = new Department("Home");
-                break;
+            case "1": department = new Department("Electronics"); break;
+            case "2": department = new Department("Clothing"); break;
+            case "3": department = new Department("Home"); break;
             default:
-                System.out.println("Error: Invalid Department.");
+                System.out.println("Error: Invalid Department.");// is going to display an error if the user enter a invalidad department
                 return;
         }
 
-        // CREATE EMPLOYEE
-        Employee emp = new Employee(name, managerType, department);
-        employees.add(emp);
-
+        Employee emp = new Employee(name, managerType, department);//Create the new employee object 
+        employees.add(emp);// Add employee to the list
+        manualApplicants.add(name);// Also sotre the name as a manual applicant
+        
+        //Validating user input message 
         System.out.println("\nEmployee added successfully!");
         System.out.println("Name: " + name);
         System.out.println("Manager Type: " + managerType);
@@ -176,20 +168,22 @@ public class DepartmentStoreSystem {
     // ======================================================
     //                DISPLAY EMPLOYEES
     // ======================================================
-    private static void displayEmployees() {
+    private static void displayAddedEmployees() { //Method to validate  displaying the added employees
 
         System.out.println("\n--- EMPLOYEE LIST ---");
 
-        if (employees.isEmpty()) {
+        if (employees.isEmpty()) {//if no emplooyees exist, show message
             System.out.println("No employees found.");
             return;
         }
 
+        //Display table header of the list employees
         System.out.println("Total Employees: " + employees.size());
         System.out.println("---------------------------------------");
         System.out.printf("%-20s %-20s %-20s\n", "Name", "Manager Type", "Department");
         System.out.println("---------------------------------------");
 
+        // Print each employee in a formatted table
         for (Employee e : employees) {
             System.out.printf("%-20s %-20s %-20s\n",
                     e.getName(),
@@ -203,21 +197,21 @@ public class DepartmentStoreSystem {
     // ======================================================
     //                SORT EMPLOYEES (RECURSIVE)
     // ======================================================
-    private static void sortEmployees() {
+    private static void sortEmployees() { //Method to validate  sort emplyees when the user added a employees
 
-        if (employees.isEmpty()) {
+        if (employees.isEmpty()) {//If the list is empty, nothing to sort
             System.out.println("No employees to sort.");
             return;
         }
 
         System.out.println("\nSorting employees alphabetically (recursive)...");
 
-        Sorter.recursiveSort(employees);
+        Sorter.recursiveSort(employees);// Call the recursive sorting method
 
-        System.out.println("Sorting completed!");
+        System.out.println("Sorting completed!");// ones the sorting is completed, is going to show a successfully message
 
-        // Display first 20 employees
-        System.out.println("\n--- FIRST 20 SORTED EMPLOYEES ---");
+        // Display first 20 employees after sorting
+        System.out.println("\n--- Display added Employees ---");// is going to show the employees that we already added
 
         int limit = Math.min(20, employees.size());
 
@@ -235,8 +229,9 @@ public class DepartmentStoreSystem {
     // ======================================================
     //                SEARCH EMPLOYEE (RECURSIVE)
     // ======================================================
-    private static void searchEmployee() {
-
+    private static void searchEmployee() { //Method to validate search the employees from the file or manually
+        
+        //if no employees exist, searching is impossible 
         if (employees.isEmpty()) {
             System.out.println("\nNo employees available to search.");
             return;
@@ -245,18 +240,18 @@ public class DepartmentStoreSystem {
         System.out.print("\nEnter employee name to search: ");
         String name = sc.nextLine().trim();
 
-        if (name.isEmpty()) {
+        if (name.isEmpty()) {// Validate empty input 
             System.out.println("Error: Name cannot be empty.");
             return;
         }
 
-        // Normalize input
-        String formattedName = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+        String formattedName = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();// Format the name for consistent searching 
 
         System.out.println("\nSearching recursively for: " + formattedName + "...");
 
-        Employee result = Searcher.recursiveSearch(employees, formattedName);
+        Employee result = Searcher.recursiveSearch(employees, formattedName);// Perform recursive search
 
+        //Display result 
         if (result == null) {
             System.out.println("\nNo employee found with the name: " + formattedName);
         } else {
@@ -273,80 +268,106 @@ public class DepartmentStoreSystem {
     // ======================================================
     //                GENERATE HIERARCHY (TREE)
     // ======================================================
-    private static void generateHierarchy() {
-
-        if (employees.isEmpty()) {
+    private static void generateHierarchy() { //Method to validate the hierarchy tree (Binary tree)
+        
+        
+        if (employees.isEmpty()) { //If no employees exist, hierarchy ca not be created 
             System.out.println("No employees available to generate hierarchy.");
             return;
         }
 
         BinaryTree tree = new BinaryTree();
 
-        for (Employee e : employees) {
+        for (Employee e : employees) { //Insert each employee into the binary tree
             tree.insert(e);
         }
 
-        tree.displayHierarchy();
+        tree.displayHierarchy(); //Display the hierarchy visually
     }
 
     // ======================================================
-    //          LOAD APPLICANTS FROM FILE
+    //           APPLICANTS FROM FILE
     // ======================================================
-    private static void loadApplicantsFromFile() {
-        applicants.clear();
 
-        try (Scanner fileScanner = new Scanner(new java.io.File("Applicants_Form.txt"))) {
+    private static void ApplicantsFromFile() { //Method to validate the applicants from file
 
-            while (fileScanner.hasNextLine()) {
-                String name = fileScanner.nextLine().trim();
+    System.out.println("Java is looking for the file in: " + new java.io.File(".").getAbsolutePath()); //Show where Java is looking for the file
+    applicants.clear();// clear previous data
 
-                if (!name.isEmpty()) {
-                    applicants.add(name);
+    try (Scanner fileScanner = new Scanner(new java.io.File("Applicants_Form.txt"))) {
+
+        if (fileScanner.hasNextLine()) { //Skip the fisrt line (Header)
+            fileScanner.nextLine();
+        }
+
+        while (fileScanner.hasNextLine()) { //read each line of the line 
+            String line = fileScanner.nextLine().trim();
+
+            if (!line.isEmpty()) {
+
+                String[] parts = line.split(","); // split line by comma
+                
+                if (parts.length >= 2) { //Ensure at least first and last name exist
+                    String firstName = parts[0].trim(); 
+                    String lastName = parts[1].trim();
+
+                    String fullName = firstName + " " + lastName;
+
+                    applicants.add(fullName); //Applicants (Added full name) to display on the list
                 }
             }
+        }
 
-            System.out.println("\nApplicants file loaded successfully!");
-            System.out.println("Total names found: " + applicants.size());
+        System.out.println("\nApplicants file loaded successfully!");// is going to display a successfully is input is correct
+        System.out.println("Total names found: " + applicants.size());// is going to display the total the names
 
-        } catch (Exception e) {
-    System.out.println("Error: Could not read Applicants_Form.txt");
-    System.out.println("Details: " + e.getMessage());
-     }
+    } catch (Exception e) {
+        System.out.println("Error: Could not read Applicants_Form.txt");// is going to be a error if applicants form is not correct
+        System.out.println("Details: " + e.getMessage());
     }
-
+}
+    
     // ======================================================
     //          SORT APPLICANTS (RECURSIVE)
     // ======================================================
-    private static void sortApplicants() {
+    private static void sortApplicants() { //Method to validate sort applicants from the file 
 
-        if (applicants.isEmpty()) {
-            System.out.println("No applicants loaded. Load the file first.");
+        if (applicants.isEmpty()) {// if no applicants were loaded, sorting is impossible
+            System.out.println("No applicants loaded. Load the file first.");// the input has to be first, to see the load on tje file
             return;
         }
 
         System.out.println("\nSorting applicants (recursive)...");
 
-        Sorter.recursiveSortStrings(applicants);
+        Sorter.recursiveSortStrings(applicants); // sort the list using recursive method 
 
-        System.out.println("Sorting completed!");
+        System.out.println("Sorting completed!"); //if everything is correct, its going to display a completed message
     }
 
     // ======================================================
     //      DISPLAY FIRST 20 APPLICANTS
     // ======================================================
-    private static void displayFirst20Applicants() {
+private static void displayFirst20Applicants() { //Method to validate the first 20 applicants 
 
-        if (applicants.isEmpty()) {
-            System.out.println("No applicants loaded.");
-            return;
-        }
-
-        System.out.println("\n--- FIRST 20 APPLICANTS ---");
-
-        int limit = Math.min(20, applicants.size());
-
-        for (int i = 0; i < limit; i++) {
-            System.out.println((i + 1) + ". " + applicants.get(i));
-        }
+    //if both lists are empty, nothing to show 
+    if (applicants.isEmpty() && manualApplicants.isEmpty()) {
+        System.out.println("No applicants loaded.");// is going to display a message if is empty 
+        return;
     }
+
+    //Combine file applicants + manually added names 
+    List<String> combined = new ArrayList<>();
+    combined.addAll(applicants);    // Combined applicants from the file   
+    combined.addAll(manualApplicants);   // combined manualApplicants from the user
+
+    Sorter.recursiveSortStrings(combined); // sort the combined list 
+
+    System.out.println("\n--- FIRST 20 APPLICANTS (FILE + MANUAL) ---");
+
+    int limit = Math.min(20, combined.size()); // is going to show a output message with the first 20 applicants(File+Manual)
+
+    for (int i = 0; i < limit; i++) { // Display the fisrt 20 full names
+        System.out.println((i + 1) + ". " + combined.get(i));
+    }
+  }
 }
